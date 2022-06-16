@@ -1,4 +1,5 @@
 const express = require('express');
+const res = require('express/lib/response')
 const app = express();
 const port = process.env.PORT || 8080;
 const trads = require("./data-trad.json")
@@ -6,15 +7,18 @@ const trads = require("./data-trad.json")
 app.use(express.static('src/public'));
 
 app.get("/api", (req, res) => {
+    res.set('Cache-Control', 'public, max-age=31557600');
     res.send({msg: "hello world"})
 })
 
 app.get("/api/:lang/:id", (req, res) => {
+    res.set('Cache-Control', 'public, max-age=31557600');
     const {lang, id} = req.params
     res.send(trads[lang]?.[id] || trads.fr[id] || "")
 })
 
 app.get("/api/:lang", (req, res) => {
+    res.set('Cache-Control', 'public, max-age=31557600');
     const {lang, id} = req.params
     res.send({...trads.fr, ...trads[lang]})
 })
